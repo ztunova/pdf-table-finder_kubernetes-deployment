@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pdf-table-extractor-fe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pdf-table-extractor-fe
+  template:
+    metadata:
+      labels:
+        app: pdf-table-extractor-fe
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: pdf-table-extractor-fe
+        image: cerit.io/tunova_zofia/pdftableextractor-fe:v0.1.0
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        ports:
+        - containerPort: 8000

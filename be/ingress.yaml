@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pdf-table-extractor-ingress
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # nginx.ingress.kubernetes.io/enable-cors: "true"
+    # nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    # nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS, DELETE"
+    # nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,X-CustomHeader,X-LANG,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,X-Api-Key,X-Device-Id,Access-Control-Allow-Origin"
+    nginx.ingress.kubernetes.io/body-size: 32m
+    nginx.ingress.kubernetes.io/client-body-buffer-size: 32m
+    nginx.ingress.kubernetes.io/client-max-body-size: 32m
+    nginx.ingress.kubernetes.io/proxy-body-size: 64m
+    nginx.ingress.kubernetes.io/proxy-buffer-size: 64k
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - "api.pdf-table-extractor.dyn.cloud.e-infra.cz"
+      secretName: api-pdf-table-extractor-dyn-cloud-e-infra-cz-tls
+  rules:
+  - host: "api.pdf-table-extractor.dyn.cloud.e-infra.cz"
+    http:
+      paths:
+      - backend:
+          service:
+            name: pdf-table-extractor-be-svc
+            port:
+              number: 80
+        pathType: ImplementationSpecific

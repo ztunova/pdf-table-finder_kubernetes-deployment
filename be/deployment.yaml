@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pdf-table-extractor-be
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pdf-table-extractor-be
+  template:
+    metadata:
+      labels:
+        app: pdf-table-extractor-be
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: pdf-table-extractor-be
+        image: cerit.io/tunova_zofia/pdftableextractor-be:v0.1.1
+        resources:
+          limits:
+            cpu: 8
+            memory: 16Gi
+        env:
+        - name: EASYOCR_MODULE_PATH
+          value: "/app/easyocr"
+        - name: "OPENAI_API_KEY"
+          valueFrom:
+            secretKeyRef:
+              name: openai-key
+              key: openai-key
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        ports:
+        - containerPort: 8000
