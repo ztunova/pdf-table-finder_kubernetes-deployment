@@ -14,7 +14,8 @@ The application is deployed on the CERIT Kubernetes cluster. To get access to th
 After completing the setup, proceed with building the Docker image, pushing it to the container registry, and applying the deployment configuration.
 1) `docker build  . -t cerit.io/{user_name}/{image_name}:{version}`
 2) `docker push cerit.io/{user_name}/{image_name}:{version}`
-3) `kubectl apply -f {filename} -n {namespace}`
+3) use correct Docker images in `deployment.yaml` files
+4) `kubectl apply -f {filename} -n {namespace}`
 
 ## Structure
 ```
